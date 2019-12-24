@@ -1,0 +1,40 @@
+package com.rewrite;
+
+public class Rewrite {
+	private static final int NUM_CPUS = Runtime.getRuntime().availableProcessors();
+	private static final ExecutorService exec = Executors.newFixedThreadPool(NUM_CPUS - 2);
+
+	public static void main(String args[]) {
+		String fn;
+		if (args.length == 0) {
+			fn = null;
+		} else {
+			fn = args[0];
+		}
+		if (fn == null) {
+			fn = "notes/syllog.lg";
+		}
+
+		try {
+			File file = new File(fn);
+			FileReader r = new FileReader(file);
+			BufferedReader bf = new BufferedReader(r);
+			StringBuilder sb = new StringBuilder();
+			String s;
+			while ((s = bf.readLine()) != null) {
+				sb.append(s + " \n");
+			}
+			String input = sb.toString();
+			TokenStream tokens = Tokenizer.tokenize(input);
+			Interpreter i = new Interpreter(tokens, exec);
+			i.eval();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			exec.shutdownNow();
+			System.exit(0);
+		}
+	}
+
+}
