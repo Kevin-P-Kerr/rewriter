@@ -8,7 +8,7 @@ import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 public class Tokenizer {
 	public static class Token {
 		public enum TokenType {
-			TT_LBRAK, TT_RBRAK, TT_PLUS, TT_LPAREN, TT_RPAREN, TT_COLON, TT_ASTER, TT_VAR, TT_PERIOD, TT_EQUALS, TT_FORALL, TT_THEREIS, TT_DOLLAR, TT_AT, TT_TILDE, TT_IN, TT_PERCENT, TT_HASH, TT_SLASH, TT_EXCLAIM;
+			TT_LCURLY, TT_RCURLY, TT_LBRAK, TT_RBRAK, TT_LPAREN, TT_RPAREN, TT_VAR, TT_PERIOD, TT_EQUALS, TT_SINGLE_QUOTE;
 		}
 
 		private final TokenType type;
@@ -54,10 +54,10 @@ public class Tokenizer {
 			}
 			String lit = Character.toString(c);
 			TokenType type;
-			if (c == '+') {
-				type = TokenType.TT_PLUS;
-			} else if (c == '!') {
-				type = TokenType.TT_EXCLAIM;
+			if (c == '{') {
+				type = TokenType.TT_LCURLY;
+			} else if (c == '}') {
+				type = TokenType.TT_RCURLY;
 			} else if (c == '(') {
 				type = TokenType.TT_LPAREN;
 			} else if (c == ')') {
@@ -66,28 +66,14 @@ public class Tokenizer {
 				type = TokenType.TT_LBRAK;
 			} else if (c == ']') {
 				type = TokenType.TT_RBRAK;
-			} else if (c == '*') {
-				type = TokenType.TT_ASTER;
-			} else if (c == ':') {
-				type = TokenType.TT_COLON;
 			} else if (c == '.') {
 				type = TokenType.TT_PERIOD;
 			} else if (c == '=') {
 				type = TokenType.TT_EQUALS;
-			} else if (c == '$') {
-				type = TokenType.TT_DOLLAR;
-			} else if (c == '~') {
-				type = TokenType.TT_TILDE;
-			} else if (c == '%') {
-				type = TokenType.TT_PERCENT;
-			} else if (c == '/') {
-				type = TokenType.TT_SLASH;
-			} else if (c == '#') {
-				type = TokenType.TT_HASH;
-			} else if (c == '@') {
-				type = TokenType.TT_AT;
+			} else if (c == '\'') {
+				type = TokenType.TT_SINGLE_QUOTE;
 			} else {
-
+				type = TokenType.TT_VAR;
 				i++;
 				while (i < ii && !isWhite((c = ln.charAt(i)))) {
 					if (isReserved(c)) {
@@ -96,15 +82,6 @@ public class Tokenizer {
 					}
 					lit += Character.toString(c);
 					i++;
-				}
-				if (lit.equals("forall")) {
-					type = TokenType.TT_FORALL;
-				} else if (lit.equals("thereis")) {
-					type = TokenType.TT_THEREIS;
-				} else if (lit.equals("in")) {
-					type = TokenType.TT_IN;
-				} else {
-					type = TokenType.TT_VAR;
 				}
 			}
 			Token t = new Token(type, lit);
