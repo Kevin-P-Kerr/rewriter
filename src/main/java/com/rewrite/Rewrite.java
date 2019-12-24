@@ -1,8 +1,14 @@
 package com.rewrite;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import com.rewrite.grammar.parse.Tokenizer;
+import com.rewrite.grammar.parse.Tokenizer.TokenStream;
+
 public class Rewrite {
-	private static final int NUM_CPUS = Runtime.getRuntime().availableProcessors();
-	private static final ExecutorService exec = Executors.newFixedThreadPool(NUM_CPUS - 2);
 
 	public static void main(String args[]) {
 		String fn;
@@ -14,11 +20,11 @@ public class Rewrite {
 		if (fn == null) {
 			fn = "notes/syllog.lg";
 		}
-
+		BufferedReader bf = null;
 		try {
 			File file = new File(fn);
 			FileReader r = new FileReader(file);
-			BufferedReader bf = new BufferedReader(r);
+			bf = new BufferedReader(r);
 			StringBuilder sb = new StringBuilder();
 			String s;
 			while ((s = bf.readLine()) != null) {
@@ -26,13 +32,17 @@ public class Rewrite {
 			}
 			String input = sb.toString();
 			TokenStream tokens = Tokenizer.tokenize(input);
-			Interpreter i = new Interpreter(tokens, exec);
-			i.eval();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			exec.shutdownNow();
+			try {
+				bf.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.exit(0);
 		}
 	}
