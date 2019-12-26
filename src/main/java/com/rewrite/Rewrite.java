@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
+import com.rewrite.grammar.parse.EBNFParser;
+import com.rewrite.grammar.parse.GenericParser;
 import com.rewrite.grammar.parse.Tokenizer;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 
@@ -32,7 +35,8 @@ public class Rewrite {
 			}
 			String input = sb.toString();
 			TokenStream tokens = Tokenizer.tokenize(input);
-
+			EBNFParser p = new EBNFParser(tokens);
+			List<GenericParser> genericParsers = p.parse();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
