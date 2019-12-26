@@ -2,8 +2,6 @@ package com.rewrite.grammar.parse;
 
 import java.util.Map;
 
-import javax.naming.OperationNotSupportedException;
-
 import com.rewrite.grammar.parse.Tokenizer.Token;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
@@ -69,6 +67,16 @@ public class GenericParser {
 				tuple.name = name;
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
+			} else if (t.getType() == TokenType.TT_SINGLE_QUOTE) {
+				t = tokens.getNext();
+				if (t.getType() != TokenType.TT_VAR) {
+					throw new Exception();
+				}
+				String l = t.getLit();
+				GenericParser n = new LiteralParser(l);
+				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_LITERAL);
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
 			} else {
 				throw new Exception("wtf");
 			}
@@ -81,7 +89,7 @@ public class GenericParser {
 		return false; // TODO: do this
 	}
 
-	public SyntaxNode parse(String str) throws OperationNotSupportedException {
+	public SyntaxNode parse(String str) {
 		return null;
 	}
 
