@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.rewrite.grammar.parse.EBNFParser;
 import com.rewrite.grammar.parse.GenericParser;
+import com.rewrite.grammar.parse.StringPump;
+import com.rewrite.grammar.parse.SyntaxNode;
 import com.rewrite.grammar.parse.Tokenizer;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 
@@ -21,13 +23,19 @@ public class Rewrite {
 			fn = args[0];
 		}
 		if (fn == null) {
-			fn = "test.ebnf";
+			fn = "test.rw";
 		}
 		BufferedReader bf = null;
+		BufferedReader obf = null;
 		try {
 			File file = new File(fn);
 			FileReader r = new FileReader(file);
-			bf = new BufferedReader(r);
+			obf = new BufferedReader(r);
+			String grammarFile = obf.readLine();
+			File gf = new File(grammarFile);
+			FileReader rr = new FileReader(gf);
+			bf = new BufferedReader(rr);
+
 			StringBuilder sb = new StringBuilder();
 			String s;
 			while ((s = bf.readLine()) != null) {
@@ -37,13 +45,22 @@ public class Rewrite {
 			TokenStream tokens = Tokenizer.tokenize(input);
 			EBNFParser p = new EBNFParser(tokens);
 			List<GenericParser> genericParsers = p.parse();
-			System.out.println(genericParsers.size());
+			GenericParser top = genericParsers.get(0);
+			String program = "";
+			s = "";
+			while ((s = obf.readLine()) != null) {
+				program += s + "\n";
+			}
+
+			SyntaxNode t = top.parse(new StringPump(program));
+			System.out.println(t);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				bf.close();
+				obf.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

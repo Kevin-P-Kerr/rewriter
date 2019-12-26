@@ -97,11 +97,26 @@ public class GenericParser {
 		return ret;
 	}
 
-	public boolean accepts(String str) {
-		return false; // TODO: do this
+	public boolean accepts(StringPump pump) {
+		GenericParserTuple gpt = head;
+		while (gpt != null) {
+			int n = pump.getIndex();
+			if (!gpt.parser.accepts(pump)) {
+				if (gpt.type != PARSER_TYPE.PT_OPTIONAL) {
+					return false;
+				} else {
+					pump.setIndex(n);
+				}
+			}
+			gpt = gpt.next;
+		}
+		return true;
 	}
 
-	public SyntaxNode parse(String str) {
+	public SyntaxNode parse(StringPump pump) throws Exception {
+		if (!accepts(pump)) {
+			throw new Exception();
+		}
 		return null;
 	}
 

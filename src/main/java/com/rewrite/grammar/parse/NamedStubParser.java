@@ -9,7 +9,7 @@ public class NamedStubParser extends GenericParser {
 	}
 
 	@Override
-	public boolean accepts(String str) {
+	public boolean accepts(StringPump str) {
 		return false;
 	}
 
