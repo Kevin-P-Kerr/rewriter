@@ -1,45 +1,77 @@
 package com.rewrite.grammar.parse;
 
+import javax.naming.OperationNotSupportedException;
+
 import com.rewrite.grammar.parse.Tokenizer.Token;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 
 public class GenericParser {
 	private static enum PARSER_TYPE {
-		PT_GROUP, PT_REPEATING, PT_OPTIONAL
+		PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
 	}
 
 	private static class GenericParserTuple {
-		boolean repeated;
+		PARSER_TYPE type;
 		private GenericParserTuple next;
 		private GenericParser parser;
+		private String name = null;
 
-		public GenericParserTuple(GenericParser gp, boolean repeated) {
-			this.repeated = repeated;
+		public GenericParserTuple(GenericParser gp, PARSER_TYPE type) {
+			this.type = type;
 			this.parser = gp;
 		}
 	}
 
-	private GenericParserTuple head = new GenericParserTuple(new NamedStubParser("head"), false);
+	private GenericParserTuple head = new GenericParserTuple(new NamedStubParser("head"), null);
 	private GenericParserTuple current = head;
 
-	public static GenericParser from(String name, TokenStream tokens) throws Exception {
+	public static GenericParser from(TokenStream tokens) throws Exception {
 		GenericParser ret = new GenericParser();
 		Token t = tokens.getNext();
 		while (t.getType() != TokenType.TT_PERIOD) {
 			if (t.getType() == TokenType.TT_LCURLY) {
 				// repeated field
-				t = tokens.getNext();
-				GenericParser gp = fromToken(t, tokens);
-				GenericParserTuple tuple = new GenericParserTuple(gp, true);
+				GenericParser gp = from(tokens);
+				GenericParserTuple tuple = new GenericParserTuple(gp, PARSER_TYPE.PT_REPEATING);
 				ret.current.next = tuple;
+				ret.current = ret.current.next;
 				t = tokens.getNext();
 				if (t.getType() != TokenType.TT_RCURLY) {
 					throw new Exception();
 				}
+			} else if (t.getType() == TokenType.TT_LBRAK) {
+				// repeated field
+				GenericParser gp = from(tokens);
+				GenericParserTuple tuple = new GenericParserTuple(gp, PARSER_TYPE.PT_OPTIONAL);
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
+				t = tokens.getNext();
+				if (t.getType() != TokenType.TT_RBRAK) {
+					throw new Exception();
+				}
+			} else if (t.getType() == TokenType.TT_LPAREN) {
+				// repeated field
+				GenericParser gp = from(tokens);
+				GenericParserTuple tuple = new GenericParserTuple(gp, PARSER_TYPE.PT_GROUP);
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
+				t = tokens.getNext();
+				if (t.getType() != TokenType.TT_RPAREN) {
+					throw new Exception();
+				}
+			} else if (t.getType() == TokenType.TT_VAR) {
+				String name = t.getLit();
+				GenericParser n = new NamedStubParser(name);
+				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_NAMED);
+				tuple.name = name;
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
+			} else {
+				throw new Exception("wtf");
 			}
-
 		}
+		ret.head = ret.head.next;
 		return ret;
 	}
 
@@ -47,7 +79,7 @@ public class GenericParser {
 		return false; // TODO: do this
 	}
 
-	public SyntaxNode parse(String str) {
+	public SyntaxNode parse(String str) throws OperationNotSupportedException {
 		return null;
 	}
 
