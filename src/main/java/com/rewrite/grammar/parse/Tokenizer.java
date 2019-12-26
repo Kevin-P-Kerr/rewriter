@@ -33,7 +33,7 @@ public class Tokenizer {
 		}
 	}
 
-	private static boolean isWhite(char c) {
+	public static boolean isWhite(char c) {
 		return c == ' ' || c == '\t' || c == '\n';
 	}
 

@@ -13,7 +13,7 @@ public class LiteralParser extends GenericParser {
 		int i = 0;
 		int ii = literal.length();
 		for (; i < ii; i++) {
-			if (sp.hasChar()) {
+			if (!sp.hasChar()) {
 				return false;
 			}
 			char c = sp.getChar();
