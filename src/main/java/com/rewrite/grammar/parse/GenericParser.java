@@ -5,6 +5,10 @@ import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 
 public class GenericParser {
+	private static enum PARSER_TYPE {
+		PT_GROUP, PT_REPEATING, PT_OPTIONAL
+	}
+
 	private static class GenericParserTuple {
 		boolean repeated;
 		private GenericParserTuple next;
@@ -37,20 +41,6 @@ public class GenericParser {
 
 		}
 		return ret;
-	}
-
-	private static GenericParser fromToken(Token t, TokenStream tokens) throws Exception {
-		if (t.getType() == TokenType.TT_VAR) {
-			return new NamedStubParser(t.getLit());
-		} else if (t.getType() == TokenType.TT_SINGLE_QUOTE) {
-			t = tokens.getNext();
-			String quotedValue = "";
-			while (t.getType() != TokenType.TT_SINGLE_QUOTE) {
-				quotedValue += t.getLit();
-			}
-			return new SimpleStringParser(quotedValue);
-		}
-		throw new Exception();
 	}
 
 	public boolean accepts(String str) {
