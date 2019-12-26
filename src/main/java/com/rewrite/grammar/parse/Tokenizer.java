@@ -93,7 +93,8 @@ public class Tokenizer {
 	}
 
 	private static boolean isReserved(char c) {
-		return c == ':' || c == '+' || c == '*' || c == '(' || c == ')';
+		return c == ':' || c == '+' || c == '*' || c == '(' || c == ')' || c == '.' || c == '{' || c == '}' || c == '['
+				|| c == ']';
 	}
 
 	public static class TokenStream {

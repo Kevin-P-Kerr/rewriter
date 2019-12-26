@@ -23,11 +23,13 @@ public class GenericParser {
 		}
 	}
 
-	private GenericParserTuple head = new GenericParserTuple(new NamedStubParser("head"), null);
+	private GenericParserTuple head;
 	private GenericParserTuple current = head;
 
 	public static GenericParser from(TokenStream tokens) throws Exception {
 		GenericParser ret = new GenericParser();
+		ret.head = new GenericParserTuple(new NamedStubParser("head"), null);
+		ret.current = ret.head;
 		Token t = tokens.getNext();
 		while (t.getType() != TokenType.TT_PERIOD) {
 			if (t.getType() == TokenType.TT_LCURLY) {
@@ -69,9 +71,7 @@ public class GenericParser {
 				ret.current = ret.current.next;
 			} else if (t.getType() == TokenType.TT_SINGLE_QUOTE) {
 				t = tokens.getNext();
-				if (t.getType() != TokenType.TT_VAR) {
-					throw new Exception();
-				}
+
 				String l = t.getLit();
 				GenericParser n = new LiteralParser(l);
 				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_LITERAL);
@@ -80,6 +80,7 @@ public class GenericParser {
 			} else {
 				throw new Exception("wtf");
 			}
+			t = tokens.getNext();
 		}
 		ret.head = ret.head.next;
 		return ret;

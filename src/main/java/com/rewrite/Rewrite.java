@@ -21,7 +21,7 @@ public class Rewrite {
 			fn = args[0];
 		}
 		if (fn == null) {
-			fn = "notes/syllog.lg";
+			fn = "test.ebnf";
 		}
 		BufferedReader bf = null;
 		try {
@@ -37,6 +37,7 @@ public class Rewrite {
 			TokenStream tokens = Tokenizer.tokenize(input);
 			EBNFParser p = new EBNFParser(tokens);
 			List<GenericParser> genericParsers = p.parse();
+			System.out.println(genericParsers.size());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
