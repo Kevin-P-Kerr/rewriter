@@ -33,6 +33,9 @@ public class EBNFParser {
 			namedParsers.put(name, gp);
 			ret.add(gp);
 		}
+		for (GenericParser gp : ret) {
+			gp.unStub(namedParsers);
+		}
 		return ret;
 	}
 }

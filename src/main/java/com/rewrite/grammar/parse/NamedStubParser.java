@@ -20,4 +20,8 @@ public class NamedStubParser extends GenericParser {
 		throw new OperationNotSupportedException();
 	}
 
+	public String getName() {
+		return name;
+	}
+
 }

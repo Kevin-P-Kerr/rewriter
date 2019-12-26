@@ -1,5 +1,7 @@
 package com.rewrite.grammar.parse;
 
+import java.util.Map;
+
 import javax.naming.OperationNotSupportedException;
 
 import com.rewrite.grammar.parse.Tokenizer.Token;
@@ -81,6 +83,25 @@ public class GenericParser {
 
 	public SyntaxNode parse(String str) throws OperationNotSupportedException {
 		return null;
+	}
+
+	public void unStub(Map<String, GenericParser> namedParsers) throws Exception {
+		GenericParserTuple gpt = head;
+		while (gpt != null) {
+			if (gpt.parser instanceof NamedStubParser) {
+				NamedStubParser nsp = (NamedStubParser) gpt.parser;
+				String name = nsp.getName();
+				GenericParser gp = namedParsers.get(name);
+				if (gp == null) {
+					throw new Exception();
+				}
+				gpt.parser = gp;
+			} else if (gpt.type == PARSER_TYPE.PT_OPTIONAL || gpt.type == PARSER_TYPE.PT_REPEATING
+					|| gpt.type == PARSER_TYPE.PT_GROUP) {
+				gpt.parser.unStub(namedParsers);
+			}
+			gpt = gpt.next;
+		}
 	}
 
 }
