@@ -8,7 +8,7 @@ import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 
 public class GenericParser {
 	private static enum PARSER_TYPE {
-		PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
+		PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
 	}
 
 	private static class GenericParserTuple {
@@ -73,8 +73,19 @@ public class GenericParser {
 				t = tokens.getNext();
 
 				String l = t.getLit();
+				t = tokens.getNext();
+				if (t.getType() != TokenType.TT_SINGLE_QUOTE) {
+					throw new Exception();
+				}
 				GenericParser n = new LiteralParser(l);
 				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_LITERAL);
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
+			} else if (t.getType() == TokenType.TT_SHEFFER) {
+				GenericParser gp = from(tokens);
+				GenericParser ggp = from(tokens);
+				DisjunctiveParser dp = new DisjunctiveParser(gp, ggp);
+				GenericParserTuple tuple = new GenericParserTuple(dp, PARSER_TYPE.PT_NAMED);
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
 			} else {
