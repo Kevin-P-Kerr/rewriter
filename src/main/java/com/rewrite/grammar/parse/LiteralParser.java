@@ -2,8 +2,10 @@ package com.rewrite.grammar.parse;
 
 public class LiteralParser extends GenericParser {
 
+	private final String literal;
+
 	public LiteralParser(String quotedValue) {
-		// TODO Auto-generated constructor stub
+		this.literal = quotedValue;
 	}
 
 }
