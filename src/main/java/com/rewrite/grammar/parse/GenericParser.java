@@ -107,6 +107,16 @@ public class GenericParser {
 				} else {
 					pump.setIndex(n);
 				}
+			} else if (gpt.type == PARSER_TYPE.PT_REPEATING) {
+				n = pump.getIndex();
+				while (pump.hasChar()) {
+					if (gpt.parser.accepts(pump)) {
+						n = pump.getIndex();
+					} else {
+						pump.setIndex(n);
+						break;
+					}
+				}
 			}
 			gpt = gpt.next;
 		}
