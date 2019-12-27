@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 import com.rewrite.grammar.parse.EBNFParser;
 import com.rewrite.grammar.parse.GenericParser;
@@ -28,6 +30,13 @@ public class Rewrite {
 		BufferedReader bf = null;
 		BufferedReader obf = null;
 		try {
+			InputStream languageSpec = Rewrite.class.getClassLoader().getResourceAsStream("lang.ebnf");
+
+			Scanner langSpec = new Scanner(languageSpec);
+			String langEBNF = "";
+			while (langSpec.hasNextLine()) {
+				langEBNF += langSpec.nextLine();
+			}
 			File file = new File(fn);
 			FileReader r = new FileReader(file);
 			obf = new BufferedReader(r);
@@ -55,6 +64,7 @@ public class Rewrite {
 			SyntaxNode t = top.parse(new StringPump(program));
 			t.rollUp();
 			System.out.println(t);
+			System.out.println(t.print());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

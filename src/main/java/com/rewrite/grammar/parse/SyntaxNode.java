@@ -74,4 +74,15 @@ public class SyntaxNode {
 		children.removeAll(toBeRemoved);
 	}
 
+	public String print() {
+		StringBuilder sb = new StringBuilder();
+		if (value != null) {
+			sb.append(value);
+		}
+		for (SyntaxNode c : children) {
+			sb.append(c.print());
+		}
+		return sb.toString();
+	}
+
 }
