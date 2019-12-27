@@ -1,0 +1,6 @@
+BooleanPart = Disj.
+Char = |'a'. |'b'. |'c'. 'd'....
+Disj = Conj ['+' Disj.].
+Conj = Atom ['*' Atom.].
+Atom = String '(' String ')'.
+String = {Char.}.
