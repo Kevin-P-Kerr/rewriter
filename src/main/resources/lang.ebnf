@@ -1,5 +1,5 @@
 Program = {Expr}.
-Expr = | InvkExpr. | ValExpr. DefExpr...
+Expr = | InvkExpr. | ValExpr. | AssignExpr. | DefExpr....
 InvkExpr = FuncName '(' Args ')'.
 Args = {Arg.}.
 Arg = ValExpr.
@@ -10,4 +10,5 @@ UpperCase = |'A'.|'B'.|'C'.|'D'.|'E'.|'F'.|'G'.|'H'.|'I'.|'J'.|'K'.|'L'.|'M'.|'N
 FuncName = VarName.
 DefExpr = 'DEF' {BodyPair.}.
 BodyPair = '"' VarName '"' VarName '"'.
+ValExpr = | '"' VarName '"'. VarName ['.' VarName.]..
 
