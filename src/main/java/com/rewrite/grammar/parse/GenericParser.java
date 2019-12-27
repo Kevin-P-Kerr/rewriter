@@ -91,11 +91,11 @@ public class GenericParser {
 				GenericParser gp = from(tokens);
 				GenericParser ggp = from(tokens);
 				DisjunctiveParser dp = new DisjunctiveParser(gp, ggp);
-				GenericParserTuple tuple = new GenericParserTuple(dp, PARSER_TYPE.PT_NAMED);
+				GenericParserTuple tuple = new GenericParserTuple(dp, PARSER_TYPE.PT_DISJ);
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
 			} else {
-				throw new Exception("wtf");
+				throw new Exception(t.getType().toString());
 			}
 			t = tokens.getNext();
 		}
@@ -177,7 +177,7 @@ public class GenericParser {
 				}
 				gpt.parser = gp;
 			} else if (gpt.type == PARSER_TYPE.PT_OPTIONAL || gpt.type == PARSER_TYPE.PT_REPEATING
-					|| gpt.type == PARSER_TYPE.PT_GROUP) {
+					|| gpt.type == PARSER_TYPE.PT_GROUP || gpt.type == PARSER_TYPE.PT_DISJ) {
 				gpt.parser.unStub(namedParsers);
 			}
 			gpt = gpt.next;

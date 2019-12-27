@@ -1,9 +1,11 @@
 package com.rewrite.grammar.parse;
 
+import java.util.Map;
+
 public class DisjunctiveParser extends GenericParser {
 
-	private final GenericParser left;
-	private final GenericParser right;
+	private GenericParser left;
+	private GenericParser right;
 
 	public DisjunctiveParser(GenericParser gp, GenericParser ggp) {
 		this.left = gp;
@@ -38,6 +40,28 @@ public class DisjunctiveParser extends GenericParser {
 		}
 		sp.setIndex(n);
 		return null;
-
 	}
+
+	@Override
+	public void unStub(Map<String, GenericParser> namedParsers) throws Exception {
+		if (left instanceof NamedStubParser) {
+			GenericParser gp = namedParsers.get(((NamedStubParser) left).getName());
+			if (gp == null) {
+				throw new Exception();
+			}
+			left = gp;
+		} else {
+			left.unStub(namedParsers);
+		}
+		if (right instanceof NamedStubParser) {
+			GenericParser gp = namedParsers.get(((NamedStubParser) right).getName());
+			if (gp == null) {
+				throw new Exception();
+			}
+			right = gp;
+		} else {
+			right.unStub(namedParsers);
+		}
+	}
+
 }

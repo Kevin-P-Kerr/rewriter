@@ -50,4 +50,9 @@ public class StringPump {
 	public void setIndex(int i) {
 		this.i = i;
 	}
+
+	@Override
+	public String toString() {
+		return str;
+	}
 }
