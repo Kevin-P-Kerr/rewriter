@@ -29,10 +29,11 @@ public class Rewrite {
 		}
 		BufferedReader bf = null;
 		BufferedReader obf = null;
+		Scanner langSpec = null;
 		try {
 			InputStream languageSpec = Rewrite.class.getClassLoader().getResourceAsStream("lang.ebnf");
 
-			Scanner langSpec = new Scanner(languageSpec);
+			langSpec = new Scanner(languageSpec);
 			String langEBNF = "";
 			while (langSpec.hasNextLine()) {
 				langEBNF += langSpec.nextLine();
@@ -73,6 +74,7 @@ public class Rewrite {
 			try {
 				bf.close();
 				obf.close();
+				langSpec.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

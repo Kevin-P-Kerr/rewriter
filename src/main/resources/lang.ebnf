@@ -1,5 +1,5 @@
 Program = {Expr.}.
-Expr = | InvkExpr. | AssignExpr. | DefExpr. ValExpr....
+Expr = | AssignExpr. | InvkExpr. | DefExpr. ValExpr....
 Args = {Arg.}.
 InvkExpr = FuncName '(' Args ')'.
 Arg = ValExpr.
@@ -11,7 +11,7 @@ BodyPair = '"' VarName '"' VarName '"'.
 ValExpr = | '"' String '"'. VarName ['.' VarName.]..
 AssignExpr = VarName '=' Expr.
 Num = {Digit.}.
-String = {-'!'.'~'..}.
+String = {-'$'.'~'..}.
 Digit = -'0'.'9'..
 Alpha = |-'a'.'z'.. -'A'.'Z'...
 
