@@ -40,4 +40,12 @@ public class LiteralParser extends GenericParser {
 		return new SyntaxNode("LITERAL", literal);
 	}
 
+	public boolean isChar() {
+		return literal.length() == 1;
+	}
+
+	public char getFirstChar() {
+		return literal.charAt(0);
+	}
+
 }

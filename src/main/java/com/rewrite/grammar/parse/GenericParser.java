@@ -8,7 +8,7 @@ import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 
 public class GenericParser {
 	private static enum PARSER_TYPE {
-		PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
+		PT_RANGE, PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
 	}
 
 	private static class GenericParserTuple {
@@ -94,6 +94,18 @@ public class GenericParser {
 				GenericParserTuple tuple = new GenericParserTuple(dp, PARSER_TYPE.PT_DISJ);
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
+			} else if (t.getType() == TokenType.TT_DASH) {
+				GenericParser gp = from(tokens);
+				GenericParser ggp = from(tokens);
+				if (!((gp instanceof LiteralParser) && (ggp instanceof LiteralParser))) {
+					throw new Exception();
+				}
+				LiteralParser start = (LiteralParser) gp;
+				LiteralParser finish = (LiteralParser) ggp;
+				if (!start.isChar() || !finish.isChar()) {
+					throw new Exception();
+				}
+				RangedParser rp = new RangedParser(start.getFirstChar(), finish.getFirstChar());
 			} else {
 				throw new Exception(t.getType().toString());
 			}
@@ -177,7 +189,8 @@ public class GenericParser {
 				}
 				gpt.parser = gp;
 			} else if (gpt.type == PARSER_TYPE.PT_OPTIONAL || gpt.type == PARSER_TYPE.PT_REPEATING
-					|| gpt.type == PARSER_TYPE.PT_GROUP || gpt.type == PARSER_TYPE.PT_DISJ) {
+					|| gpt.type == PARSER_TYPE.PT_GROUP || gpt.type == PARSER_TYPE.PT_DISJ
+					|| gpt.type == PARSER_TYPE.PT_RANGE) {
 				gpt.parser.unStub(namedParsers);
 			}
 			gpt = gpt.next;

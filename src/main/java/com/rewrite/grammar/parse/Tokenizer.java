@@ -8,7 +8,7 @@ import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 public class Tokenizer {
 	public static class Token {
 		public enum TokenType {
-			TT_SHEFFER, TT_LCURLY, TT_RCURLY, TT_LBRAK, TT_RBRAK, TT_LPAREN, TT_RPAREN, TT_VAR, TT_PERIOD, TT_EQUALS, TT_SINGLE_QUOTE;
+			TT_SHEFFER, TT_LCURLY, TT_RCURLY, TT_LBRAK, TT_RBRAK, TT_LPAREN, TT_RPAREN, TT_VAR, TT_PERIOD, TT_EQUALS, TT_SINGLE_QUOTE, TT_DASH;
 		}
 
 		private final TokenType type;
@@ -74,6 +74,8 @@ public class Tokenizer {
 				type = TokenType.TT_SINGLE_QUOTE;
 			} else if (c == '|') {
 				type = TokenType.TT_SHEFFER;
+			} else if (c == '-') {
+				type = TokenType.TT_DASH;
 			} else {
 				type = TokenType.TT_VAR;
 				i++;
@@ -95,8 +97,8 @@ public class Tokenizer {
 	}
 
 	private static boolean isReserved(char c) {
-		return c == ':' || c == '+' || c == '*' || c == '(' || c == ')' || c == '.' || c == '{' || c == '}' || c == '['
-				|| c == ']' || c == '|' || c == '\'';
+		return c == '-' || c == ':' || c == '+' || c == '*' || c == '(' || c == ')' || c == '.' || c == '{' || c == '}'
+				|| c == '[' || c == ']' || c == '|' || c == '\'';
 	}
 
 	public static class TokenStream {
