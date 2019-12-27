@@ -53,6 +53,7 @@ public class Rewrite {
 			}
 
 			SyntaxNode t = top.parse(new StringPump(program));
+			t.rollUp();
 			System.out.println(t);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

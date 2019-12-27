@@ -24,4 +24,20 @@ public class LiteralParser extends GenericParser {
 		return true;
 	}
 
+	@Override
+	public SyntaxNode parse(StringPump sp) {
+		int i = 0;
+		int ii = literal.length();
+		for (; i < ii; i++) {
+			if (!sp.hasChar()) {
+				return null;
+			}
+			char c = sp.getChar();
+			if (c != literal.charAt(i)) {
+				return null;
+			}
+		}
+		return new SyntaxNode("LITERAL", literal);
+	}
+
 }

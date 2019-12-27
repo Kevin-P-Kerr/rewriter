@@ -15,12 +15,18 @@ public class GenericParser {
 		PARSER_TYPE type;
 		private GenericParserTuple next;
 		private GenericParser parser;
-		private String name = null;
+		private String name;
 
 		public GenericParserTuple(GenericParser gp, PARSER_TYPE type) {
 			this.type = type;
 			this.parser = gp;
 		}
+	}
+
+	private String name = null;
+
+	public void setName(String n) {
+		this.name = n;
 	}
 
 	private GenericParserTuple head;
@@ -124,10 +130,39 @@ public class GenericParser {
 	}
 
 	public SyntaxNode parse(StringPump pump) throws Exception {
-		if (!accepts(pump)) {
-			throw new Exception();
+
+		SyntaxNode sn = new SyntaxNode(name);
+
+		GenericParserTuple gpt = head;
+		while (gpt != null) {
+			int n = pump.getIndex();
+			SyntaxNode node = gpt.parser.parse(pump);
+			if (node == null) {
+				if (gpt.type != PARSER_TYPE.PT_OPTIONAL) {
+					return null;
+				} else {
+					pump.setIndex(n);
+				}
+			} else {
+				sn.addChild(node);
+				if (gpt.type == PARSER_TYPE.PT_REPEATING) {
+					n = pump.getIndex();
+					while (pump.hasChar()) {
+						node = gpt.parser.parse(pump);
+						if (node != null) {
+							n = pump.getIndex();
+							sn.addChild(node);
+						} else {
+							pump.setIndex(n);
+							break;
+						}
+					}
+				}
+
+			}
+			gpt = gpt.next;
 		}
-		return null;
+		return sn;
 	}
 
 	public void unStub(Map<String, GenericParser> namedParsers) throws Exception {

@@ -30,6 +30,7 @@ public class EBNFParser {
 				throw new Exception();
 			}
 			GenericParser gp = GenericParser.from(tokens);
+			gp.setName(name);
 			namedParsers.put(name, gp);
 			ret.add(gp);
 		}
