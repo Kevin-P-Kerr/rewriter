@@ -95,8 +95,8 @@ public class GenericParser {
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
 			} else if (t.getType() == TokenType.TT_DASH) {
-				GenericParser gp = from(tokens);
-				GenericParser ggp = from(tokens);
+				GenericParser gp = from(tokens).head.parser;
+				GenericParser ggp = from(tokens).head.parser;
 				if (!((gp instanceof LiteralParser) && (ggp instanceof LiteralParser))) {
 					throw new Exception();
 				}
@@ -106,6 +106,9 @@ public class GenericParser {
 					throw new Exception();
 				}
 				RangedParser rp = new RangedParser(start.getFirstChar(), finish.getFirstChar());
+				GenericParserTuple tuple = new GenericParserTuple(rp, PARSER_TYPE.PT_RANGE);
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
 			} else {
 				throw new Exception(t.getType().toString());
 			}

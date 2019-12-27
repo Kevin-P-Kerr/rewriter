@@ -5,13 +5,13 @@ InvkExpr = FuncName '(' Args ')'.
 Arg = ValExpr.
 FuncName = VarName.
 VarName = {Char.}.
-Char = | Digit. Alpha.
+Char = | Digit. Alpha..
 DefExpr = 'DEF' {BodyPair.}.
 BodyPair = '"' VarName '"' VarName '"'.
 ValExpr = | '"' String '"'. VarName ['.' VarName.]..
 AssignExpr = VarName '=' Expr.
-String = {-'!''~'.}.
 Num = {Digit.}.
-Digit = -'0''9'.
-Alpha = |-'a''z'. -'A''Z'..
+String = {-'!'.'~'..}.
+Digit = -'0'.'9'..
+Alpha = |-'a'.'z'.. -'A'.'Z'...
 
