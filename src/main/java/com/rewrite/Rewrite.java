@@ -37,6 +37,8 @@ public class Rewrite {
 			while (langSpec.hasNextLine()) {
 				langEBNF += langSpec.nextLine();
 			}
+			EBNFParser langParserParser = new EBNFParser(Tokenizer.tokenize(langEBNF));
+			GenericParser langParser = langParserParser.parse().get(0);
 			File file = new File(fn);
 			FileReader r = new FileReader(file);
 			obf = new BufferedReader(r);
@@ -60,7 +62,7 @@ public class Rewrite {
 			while ((s = obf.readLine()) != null) {
 				program += s + "\n";
 			}
-			SyntaxNode t = top.parse(new StringPump(program));
+			SyntaxNode t = langParser.parse(new StringPump(program));
 			t.rollUp();
 			System.out.println(t);
 			System.out.println(t.print());
