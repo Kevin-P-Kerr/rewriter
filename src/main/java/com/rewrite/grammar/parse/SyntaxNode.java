@@ -33,7 +33,28 @@ public class SyntaxNode {
 		}
 		for (SyntaxNode sn : children) {
 			sb.append("\n");
-			sb.append(sn.toString());
+			sb.append(sn.toString(1));
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+
+	private Object toString(int i) {
+		int l = i;
+		String tab = "";
+		while (i > 0) {
+			tab += ' ';
+			i--;
+		}
+		StringBuilder sb = new StringBuilder();
+		if (value != null) {
+			sb.append(tab + "(" + value);
+		} else {
+			sb.append(tab + "(" + name);
+		}
+		for (SyntaxNode sn : children) {
+			sb.append("\n");
+			sb.append(sn.toString(l + 1));
 		}
 		sb.append(")");
 		return sb.toString();

@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'application'
 
-mainClassName = 'com.lang.Solve' 
+mainClassName = 'com.rewrite.Rewrite' 
 repositories {
     mavenCentral()
 }
