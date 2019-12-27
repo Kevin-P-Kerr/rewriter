@@ -1,12 +1,12 @@
 Program = {Expr}.
-Expr = | InvkExpr DefExpr.
+Expr = | InvkExpr. | ValExpr. DefExpr...
 InvkExpr = FuncName '(' Args ')'.
 Args = {Arg.}.
-Arg = VarName.
+Arg = ValExpr.
 VarName = {Char.}.
 Char = | LowerCase UpperCase. 
 LowerCase = |'a'.|'b'.|'c'.|'d'.|'e'.|'f'.|'g'.|'h'.|'i'.|'j'.|'k'.|'l'.|'m'.|'n'.|'o'.|'p'.|'q'.|'r'.|'s'.|'t'.|'u'.|'v'.|'w'.|'x'.|'y' 'z'.........................
-UpperCase = |'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y' 'Z'..........................
+UpperCase = |'A'.|'B'.|'C'.|'D'.|'E'.|'F'.|'G'.|'H'.|'I'.|'J'.|'K'.|'L'.|'M'.|'N'.|'O'.|'P'.|'Q'.|'R'.|'S'.|'T'.|'U'.|'V'.|'W'.|'X'.|'Y' 'Z'.........................
 FuncName = VarName.
 DefExpr = 'DEF' {BodyPair.}.
 BodyPair = '"' VarName '"' VarName '"'.

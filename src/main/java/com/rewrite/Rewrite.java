@@ -60,7 +60,6 @@ public class Rewrite {
 			while ((s = obf.readLine()) != null) {
 				program += s + "\n";
 			}
-
 			SyntaxNode t = top.parse(new StringPump(program));
 			t.rollUp();
 			System.out.println(t);
