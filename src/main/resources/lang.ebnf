@@ -13,7 +13,7 @@ BodyPair = '"' VarName '"' VarName '"'.
 ValExpr = | '"' String '"'. VarName ['.' VarName.]..
 AssignExpr = VarName '=' Expr.
 String = {| Char. SpecChar..}.
-SpecChar = | '('.  ')'..
+SpecChar = | '('. |  ')'. | '-'. | '$'  ..
 Digit = | '1'. | '2'. |'3'.|'4'.|'5'.|'6'.|'7'.|'8'.|'9'. '0'..........
 Num = {Digit.}.
 
