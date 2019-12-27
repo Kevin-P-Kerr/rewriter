@@ -23,6 +23,14 @@ public class SyntaxNode {
 		children.add(c);
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
