@@ -92,4 +92,8 @@ public class SyntaxNode {
 		return sb.toString();
 	}
 
+	public List<SyntaxNode> getChildren() {
+		return children;
+	}
+
 }
