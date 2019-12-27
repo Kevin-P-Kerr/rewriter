@@ -62,16 +62,15 @@ public class SyntaxNode {
 
 	public void rollUp() {
 		List<SyntaxNode> newChildren = Lists.newArrayList();
-		List<SyntaxNode> toBeRemoved = Lists.newArrayList();
 		for (SyntaxNode c : children) {
 			c.rollUp();
 			if (c.name == null && c.value == null) {
 				newChildren.addAll(c.children);
-				toBeRemoved.add(c);
+			} else {
+				newChildren.add(c);
 			}
 		}
-		children.addAll(newChildren);
-		children.removeAll(toBeRemoved);
+		children = newChildren;
 	}
 
 	public String print() {
