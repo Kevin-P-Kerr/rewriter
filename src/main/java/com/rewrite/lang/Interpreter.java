@@ -101,20 +101,46 @@ public class Interpreter {
 	}
 
 	private static SyntaxNode partialEval(SyntaxNode s) throws Exception {
-		assertName(s, "InvkExpr");
-		SyntaxNode funcName = s.getChildren().get(0);
-		assertName(funcName, "FuncName");
-		SyntaxNode varName = s.getChildren().get(1);
-		assertName(varName, "VarName");
-		String name = collectStringFromVarName(varName);
+		return null;
+	}
+
+	private static boolean matches(SyntaxNode matcher, SyntaxNode s) {
+		if (matcher.getName().equals("WildCard")) {
+			return true;
+		}
+		if (!matcher.getName().equals(s.getName())) {
+			return false;
+		}
+		if (matcher.getValue() != null && !matcher.getValue().equals(s.getValue())) {
+			return false;
+		}
+		if (matcher.getChildren().size() != s.getChildren().size()) {
+			return false;
+		}
+		for (int i = 0, ii = matcher.getChildren().size(); i < ii; i++) {
+			if (!matches(matcher.getChildren().get(i), s.getChildren().get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static SyntaxNode attemptRewrite(SyntaxNode matcher, SyntaxNode result, SyntaxNode s, Environment e) {
+		if (!matches(matcher, s)) {
+			return null;
+		}
+		return rewrite(result, s, e);
 	}
 
 	private static SyntaxNode evalRewrite(SyntaxNode body, SyntaxNode s, Environment e) throws Exception {
 		for (SyntaxNode c : body.getChildren()) {
 			assertName(c, "BodyPair");
-			SyntaxNode matcher = partialEval(c.getChildren().get(0));
-			SyntaxNode result = partialEval(c.getChildren().get(1));
+			SyntaxNode matcher = c.getChildren().get(0);
+			SyntaxNode result = c.getChildren().get(1);
 			SyntaxNode rewritten = attemptRewrite(matcher, result, s, e);
+			if (rewritten != null) {
+				return rewritten;
+			}
 		}
 		return s;
 	}
