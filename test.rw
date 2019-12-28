@@ -1,5 +1,5 @@
 arith.ebnf
 
 
-!DEF foo : Math("$a*$b/$c") Math("$a/$c*$b")
+!DEF foo : Math("$a*$b/$c") Math("$a/$c*$b")!
 foo(b.2)
