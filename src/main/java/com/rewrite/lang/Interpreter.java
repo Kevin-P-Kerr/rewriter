@@ -103,8 +103,9 @@ public class Interpreter {
 	private static SyntaxNode evalRewrite(SyntaxNode body, SyntaxNode s, Environment e) throws Exception {
 		for (SyntaxNode c : body.getChildren()) {
 			assertName(c, "BodyPair");
-			String template = collectStringFromString(c.getChildren().get(0));
-			// String toBeReplaced = collectStringFromString(c.getChi)
+			SyntaxNode matcher = partialEval(c.getChildren().get(0));
+			SyntaxNode result = partialEval(c.getChildren().get(1));
+			SyntaxNode rewritten = attemptRewrite(matcher, result, s, e);
 		}
 		return s;
 	}
