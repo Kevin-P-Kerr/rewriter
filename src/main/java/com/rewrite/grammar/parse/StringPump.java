@@ -13,11 +13,8 @@ public class StringPump {
 	}
 
 	private void killWhite() {
-		while (Tokenizer.isWhite(str.charAt(i))) {
+		while (i < l && Tokenizer.isWhite(str.charAt(i))) {
 			i++;
-			if (i >= l) {
-				return;
-			}
 		}
 	}
 
@@ -25,9 +22,9 @@ public class StringPump {
 		if (i >= l) {
 			throw new IndexOutOfBoundsException();
 		}
+		killWhite();
 		int n = i;
 		i++;
-		killWhite();
 		return str.charAt(n);
 	}
 
@@ -36,10 +33,14 @@ public class StringPump {
 			throw new IndexOutOfBoundsException();
 		}
 		int n = i;
-		return str.charAt(n);
+		killWhite();
+		char c = str.charAt(i);
+		i = n;
+		return c;
 	}
 
 	public boolean hasChar() {
+		killWhite();
 		return i < l;
 	}
 
