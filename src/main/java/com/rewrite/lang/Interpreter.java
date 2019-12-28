@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.rewrite.grammar.parse.GenericParser;
+import com.rewrite.grammar.parse.StringPump;
 import com.rewrite.grammar.parse.SyntaxNode;
 
 public class Interpreter {
@@ -89,19 +90,25 @@ public class Interpreter {
 		return ret;
 	}
 
-	private static String collectStringFromString(SynatxNode str) {
-		return "";
+	private static String collectStringFromString(SyntaxNode str) {
+		return str.getValue();
+	}
+
+	private static void assertName(SyntaxNode s, String n) throws Exception {
+		if (!s.getName().equals(n)) {
+			throw new Exception();
+		}
+	}
+
+	private static SyntaxNode evalRewrite(SyntaxNode template, SyntaxNode s, Environment e) {
+
 	}
 
 	private static SyntaxNode evalInvoke(SyntaxNode s, Environment e) throws Exception {
 		SyntaxNode funcName = s.getChildren().get(0);
-		if (!funcName.getName().equals("FuncName")) {
-			throw new Exception();
-		}
+		assertName(funcName, "FuncName");
 		SyntaxNode varName = funcName.getChildren().get(0);
-		if (!varName.getName().equals("VarName")) {
-			throw new Exception();
-		}
+		assertName(varName, "VarName");
 		String k = collectStringFromVarName(varName);
 		SyntaxNode args = s.getChildren().get(2);
 		if (!args.getName().equals("Args")) {
@@ -114,11 +121,12 @@ public class Interpreter {
 				throw new Exception();
 			}
 			SyntaxNode str = arguments.get(0);
-			if (!str.getName().equals("String")) {
-				throw new Exception();
-			}
+			assertName(str, "String");
 			String toBeParsed = collectStringFromString(str);
+			return gp.parse(new StringPump(toBeParsed));
 		}
+		SyntaxNode found = e.getSyntax(k);
+		return evalRewrite(found, s, e);
 	}
 
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
