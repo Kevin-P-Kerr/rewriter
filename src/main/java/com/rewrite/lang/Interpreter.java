@@ -125,24 +125,28 @@ public class Interpreter {
 		return true;
 	}
 
+	private static SyntaxNode rewrite(SyntaxNode matcher, SyntaxNode result, SyntaxNode s, Environment e) {
+		return null;
+	}
+
 	private static SyntaxNode attemptRewrite(SyntaxNode matcher, SyntaxNode result, SyntaxNode s, Environment e) {
 		if (!matches(matcher, s)) {
 			return null;
 		}
-		return rewrite(result, s, e);
+		return rewrite(matcher, result, s, e);
 	}
 
-	private static SyntaxNode evalRewrite(SyntaxNode body, SyntaxNode s, Environment e) throws Exception {
+	private static SyntaxNode evalRewrite(SyntaxNode body, List<SyntaxNode> arguments, Environment e) throws Exception {
 		for (SyntaxNode c : body.getChildren()) {
 			assertName(c, "BodyPair");
 			SyntaxNode matcher = c.getChildren().get(0);
 			SyntaxNode result = c.getChildren().get(1);
-			SyntaxNode rewritten = attemptRewrite(matcher, result, s, e);
+			SyntaxNode rewritten = attemptRewrite(matcher, result, arguments.get(0), e);
 			if (rewritten != null) {
 				return rewritten;
 			}
 		}
-		return s;
+		return arguments.get(0);
 	}
 
 	private static SyntaxNode evalInvoke(SyntaxNode s, Environment e) throws Exception {
@@ -167,7 +171,7 @@ public class Interpreter {
 			return gp.parse(new StringPump(toBeParsed));
 		}
 		SyntaxNode found = e.getSyntax(k);
-		return evalRewrite(found, s, e);
+		return evalRewrite(found, arguments, e);
 	}
 
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
