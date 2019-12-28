@@ -100,6 +100,15 @@ public class Interpreter {
 		}
 	}
 
+	private static SyntaxNode partialEval(SyntaxNode s) throws Exception {
+		assertName(s, "InvkExpr");
+		SyntaxNode funcName = s.getChildren().get(0);
+		assertName(funcName, "FuncName");
+		SyntaxNode varName = s.getChildren().get(1);
+		assertName(varName, "VarName");
+		String name = collectStringFromVarName(varName);
+	}
+
 	private static SyntaxNode evalRewrite(SyntaxNode body, SyntaxNode s, Environment e) throws Exception {
 		for (SyntaxNode c : body.getChildren()) {
 			assertName(c, "BodyPair");
