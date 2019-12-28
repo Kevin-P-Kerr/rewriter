@@ -125,8 +125,41 @@ public class Interpreter {
 		return true;
 	}
 
+	private static void getLocals(SyntaxNode matcher, SyntaxNode s, Map<String, SyntaxNode> locals) {
+		if (matcher.getName().equals("WildCard")) {
+			locals.put(matcher.getValue(), s);
+			return;
+		}
+		for (int i = 0, ii = matcher.getChildren().size(); i < ii; i++) {
+			getLocals(matcher.getChildren().get(i), s.getChildren().get(i), locals);
+		}
+	}
+
+	private static SyntaxNode doRewrite(SyntaxNode template, SyntaxNode s, Map<String, SyntaxNode> locals) {
+		SyntaxNode ret;
+		if (template.getName().equals("WildCard")) {
+			SyntaxNode c = locals.get(template.getValue());
+			ret = new SyntaxNode(c.getName(), c.getValue());
+		} else {
+			ret = new SyntaxNode(s.getName(), s.getValue());
+		}
+		for (SyntaxNode c : template.getChildren()) {
+			SyntaxNode newChild;
+			if (c.getName().equals("WildCard")) {
+				SyntaxNode ss = locals.get(template.getValue());
+				newChild = new SyntaxNode(ss.getName(), ss.getValue());
+			} else {
+				newChild = new SyntaxNode(c.getName(), c.getValue());
+			}
+			ret.addChild(newChild);
+		}
+		return ret;
+	}
+
 	private static SyntaxNode rewrite(SyntaxNode matcher, SyntaxNode result, SyntaxNode s, Environment e) {
-		return null;
+		Map<String, SyntaxNode> locals = Maps.newHashMap();
+		getLocals(matcher, s, locals);
+		return doRewrite(result, s, locals);
 	}
 
 	private static SyntaxNode attemptRewrite(SyntaxNode matcher, SyntaxNode result, SyntaxNode s, Environment e) {
@@ -137,16 +170,20 @@ public class Interpreter {
 	}
 
 	private static SyntaxNode evalRewrite(SyntaxNode body, List<SyntaxNode> arguments, Environment e) throws Exception {
+		if (arguments.size() > 1) {
+			throw new Exception();
+		}
+		SyntaxNode argument = arguments.get(0);
 		for (SyntaxNode c : body.getChildren()) {
 			assertName(c, "BodyPair");
 			SyntaxNode matcher = c.getChildren().get(0);
 			SyntaxNode result = c.getChildren().get(1);
-			SyntaxNode rewritten = attemptRewrite(matcher, result, arguments.get(0), e);
+			SyntaxNode rewritten = attemptRewrite(matcher, result, argument, e);
 			if (rewritten != null) {
 				return rewritten;
 			}
 		}
-		return arguments.get(0);
+		return argument;
 	}
 
 	private static SyntaxNode evalInvoke(SyntaxNode s, Environment e) throws Exception {
