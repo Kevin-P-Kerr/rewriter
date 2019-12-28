@@ -100,8 +100,13 @@ public class Interpreter {
 		}
 	}
 
-	private static SyntaxNode evalRewrite(SyntaxNode template, SyntaxNode s, Environment e) {
-
+	private static SyntaxNode evalRewrite(SyntaxNode body, SyntaxNode s, Environment e) throws Exception {
+		for (SyntaxNode c : body.getChildren()) {
+			assertName(c, "BodyPair");
+			String template = collectStringFromString(c.getChildren().get(0));
+			// String toBeReplaced = collectStringFromString(c.getChi)
+		}
+		return s;
 	}
 
 	private static SyntaxNode evalInvoke(SyntaxNode s, Environment e) throws Exception {
@@ -130,16 +135,14 @@ public class Interpreter {
 	}
 
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
-		if (!s.getName().equals("Expr")) {
-			throw new Exception();
-		}
+		assertName(s, "Expr");
 		s = s.getChildren().get(0);
 		switch (s.getName()) {
 		case "AssignExpr":
 			return evalAssign(s, e);
 		case "InvExpr":
 			return evalInvoke(s, e);
-			break;
+
 		case "DefExpr":
 			break;
 		case "ValExpr":
@@ -152,9 +155,7 @@ public class Interpreter {
 	}
 
 	private static void eval(SyntaxNode s, Environment e) throws Exception {
-		if (!s.getName().equals("Program")) {
-			throw new Exception();
-		}
+		assertName(s, "Program");
 		for (SyntaxNode c : s.getChildren()) {
 			SyntaxNode g = evalExpr(c, e);
 			System.out.println(g.print());

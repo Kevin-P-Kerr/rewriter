@@ -7,7 +7,7 @@ FuncName = VarName.
 VarName = {Char.}.
 Char = | Digit. Alpha..
 DefExpr = 'DEF' {BodyPair.}.
-BodyPair = '"' VarName '"' VarName '"'.
+BodyPair = InvkExpr InvkExpr .
 ValExpr = | '"' String '"'. VarName ['.' VarName.]..
 AssignExpr = VarName '=' Expr.
 Num = {Digit.}.

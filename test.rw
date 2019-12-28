@@ -4,3 +4,5 @@ a = "(2)"
 b = "(2 + 3*2/20)"
 c = Math(a)
 b = Math(a)
+
+DEF Math(a) Math(b)
