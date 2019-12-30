@@ -145,4 +145,8 @@ public class Tokenizer {
 		}
 	}
 
+	public static boolean isAlpha(char c) {
+		return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
+	}
+
 }

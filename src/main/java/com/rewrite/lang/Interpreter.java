@@ -219,7 +219,7 @@ public class Interpreter {
 			SyntaxNode c = children.get(i);
 			assertName(c, "BodyPair");
 			SyntaxNode invk1 = c.getChildren().get(0);
-			assertName(invk1, "InvkExpr");
+			assertName(invk1, "PartInvkExpr");
 			SyntaxNode funcName = invk1.getChildren().get(0);
 			assertName(funcName, "FuncName");
 			SyntaxNode varName = funcName.getChildren().get(0);
@@ -228,8 +228,10 @@ public class Interpreter {
 			if (gp == null) {
 				throw new Exception();
 			}
-			// String arg = collectStringFromString(invk1.getChildren().get(2).getChildren(0))
-
+			SyntaxNode str = invk1.getChildren().get(3);
+			assertName(str, "String");
+			String arg = collectStringFromString(invk1.getChildren().get(3));
+			SyntaxNode pe = gp.partiallyParse(new StringPump(arg));
 		}
 		return null;
 	}

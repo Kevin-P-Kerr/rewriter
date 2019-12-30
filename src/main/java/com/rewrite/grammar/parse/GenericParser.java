@@ -200,4 +200,50 @@ public class GenericParser {
 		}
 	}
 
+	public SyntaxNode partiallyParse(StringPump pump) throws Exception {
+		int n = pump.getIndex();
+		char c = pump.getChar();
+		if (c == '$') {
+			String name = "";
+			while (Tokenizer.isAlpha((c = pump.peekChar()))) {
+				c = pump.getChar();
+				name += c;
+			}
+			return new SyntaxNode("WildCard", name);
+		}
+		pump.setIndex(n);
+		SyntaxNode sn = new SyntaxNode(name);
+
+		GenericParserTuple gpt = head;
+		while (gpt != null) {
+			n = pump.getIndex();
+			SyntaxNode node = gpt.parser.partiallyParse(pump);
+			if (node == null) {
+				if (gpt.type != PARSER_TYPE.PT_OPTIONAL) {
+					return null;
+				} else {
+					pump.setIndex(n);
+				}
+			} else {
+				sn.addChild(node);
+				if (gpt.type == PARSER_TYPE.PT_REPEATING) {
+					n = pump.getIndex();
+					while (pump.hasChar()) {
+						node = gpt.parser.partiallyParse(pump);
+						if (node != null) {
+							n = pump.getIndex();
+							sn.addChild(node);
+						} else {
+							pump.setIndex(n);
+							break;
+						}
+					}
+				}
+
+			}
+			gpt = gpt.next;
+		}
+		return sn;
+	}
+
 }
