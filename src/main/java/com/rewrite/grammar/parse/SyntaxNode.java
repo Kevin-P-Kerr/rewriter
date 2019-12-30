@@ -105,4 +105,12 @@ public class SyntaxNode {
 		return name != null;
 	}
 
+	public SyntaxNode copy() {
+		SyntaxNode sn = new SyntaxNode(name, value);
+		for (SyntaxNode c : children) {
+			sn.addChild(c.copy());
+		}
+		return sn;
+	}
+
 }

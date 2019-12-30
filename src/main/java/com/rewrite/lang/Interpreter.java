@@ -138,20 +138,15 @@ public class Interpreter {
 	private static SyntaxNode doRewrite(SyntaxNode template, SyntaxNode s, Map<String, SyntaxNode> locals) {
 		SyntaxNode ret;
 		if (template.getName().equals("WildCard")) {
-			SyntaxNode c = locals.get(template.getValue());
-			ret = new SyntaxNode(c.getName(), c.getValue());
+			SyntaxNode c = locals.get(template.print());
+			ret = c.copy();
+			return ret;
 		} else {
 			ret = new SyntaxNode(s.getName(), s.getValue());
 		}
-		for (SyntaxNode c : template.getChildren()) {
-			SyntaxNode newChild;
-			if (c.hasName() && c.getName().equals("WildCard")) {
-				SyntaxNode ss = locals.get(template.getValue());
-				newChild = new SyntaxNode(ss.getName(), ss.getValue());
-			} else {
-				newChild = new SyntaxNode(c.getName(), c.getValue());
-			}
-			ret.addChild(newChild);
+		for (int i = 0, ii = s.getChildren().size(); i < ii; i++) {
+			SyntaxNode rc = doRewrite(template.getChildren().get(i), s.getChildren().get(i), locals);
+			ret.addChild(rc);
 		}
 		return ret;
 	}
@@ -246,7 +241,7 @@ public class Interpreter {
 			}
 			str = invk2.getChildren().get(3);
 			assertName(str, "String");
-			arg = collectStringFromString(invk1.getChildren().get(3));
+			arg = collectStringFromString(invk2.getChildren().get(3));
 			SyntaxNode pe2 = gp.parse(new StringPump(arg)).rollUp();
 			SyntaxNode v = new SyntaxNode("BodyPair");
 			v.addChild(pe);
