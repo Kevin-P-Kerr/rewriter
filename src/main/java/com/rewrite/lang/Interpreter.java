@@ -211,6 +211,29 @@ public class Interpreter {
 		return evalRewrite(found, arguments, e);
 	}
 
+	private static SyntaxNode evalDef(SyntaxNode s, Environment e) throws Exception {
+		assertName(s, "DefExpr");
+		List<SyntaxNode> children = s.getChildren();
+		String name = collectStringFromVarName(children.get(1));
+		for (int i = 2, ii = s.getChildren().size(); i < ii; i++) {
+			SyntaxNode c = children.get(i);
+			assertName(c, "BodyPair");
+			SyntaxNode invk1 = c.getChildren().get(0);
+			assertName(invk1, "InvkExpr");
+			SyntaxNode funcName = invk1.getChildren().get(0);
+			assertName(funcName, "FuncName");
+			SyntaxNode varName = funcName.getChildren().get(0);
+			String functionName = collectStringFromVarName(varName);
+			GenericParser gp = e.getParser(functionName);
+			if (gp == null) {
+				throw new Exception();
+			}
+			// String arg = collectStringFromString(invk1.getChildren().get(2).getChildren(0))
+
+		}
+		return null;
+	}
+
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
 		assertName(s, "Expr");
 		s = s.getChildren().get(0);
@@ -219,9 +242,8 @@ public class Interpreter {
 			return evalAssign(s, e);
 		case "InvExpr":
 			return evalInvoke(s, e);
-
 		case "DefExpr":
-			break;
+			return evalDef(s, e);
 		case "ValExpr":
 			break;
 		default:
