@@ -257,6 +257,31 @@ public class Interpreter {
 		return sn;
 	}
 
+	private static int getNumFromNum(SyntaxNode sn) {
+		String s = "";
+		for (SyntaxNode c : sn.getChildren()) {
+			s += c.getValue();
+		}
+		return Integer.parseInt(s);
+	}
+
+	private static SyntaxNode evalVal(SyntaxNode sn, Environment e) throws Exception {
+		if (sn.getValue().equals("\"")) {
+			return sn;
+		}
+		SyntaxNode varName = sn.getChildren().get(0);
+		assertName(varName, "VarName");
+		String k = collectStringFromVarName(varName);
+		SyntaxNode v = e.getSyntax(k);
+		if (sn.getChildren().size() > 1) {
+			SyntaxNode num = sn.getChildren().get(2);
+			assertName(num, "Num");
+			int n = getNumFromNum(num);
+			return v.getChildren().get(n);
+		}
+		return v;
+	}
+
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
 		assertName(s, "Expr");
 		s = s.getChildren().get(0);
@@ -268,12 +293,12 @@ public class Interpreter {
 		case "DefExpr":
 			return evalDef(s, e);
 		case "ValExpr":
-			break;
+			return evalVal(s, e);
 		default:
 			throw new Exception();
 
 		}
-		return null;
+
 	}
 
 	private static void eval(SyntaxNode s, Environment e) throws Exception {
