@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.rewrite.grammar.parse.EBNFParser;
@@ -14,6 +14,7 @@ import com.rewrite.grammar.parse.StringPump;
 import com.rewrite.grammar.parse.SyntaxNode;
 import com.rewrite.grammar.parse.Tokenizer;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
+import com.rewrite.lang.Interpreter;
 
 public class Rewrite {
 
@@ -56,17 +57,15 @@ public class Rewrite {
 			String input = sb.toString();
 			TokenStream tokens = Tokenizer.tokenize(input);
 			EBNFParser p = new EBNFParser(tokens);
-			List<GenericParser> genericParsers = p.parse();
-			GenericParser top = genericParsers.get(0);
+			Map<String, GenericParser> originalEnv = p.parseToMap();
 			String program = "";
 			s = "";
 			while ((s = obf.readLine()) != null) {
 				program += s + "\n";
 			}
-			SyntaxNode t = langParser.parse(new StringPump(program));
-			t.rollUp();
-			System.out.println(t);
-			System.out.println(t.print());
+			SyntaxNode t = langParser.parse(new StringPump(program)).rollUp();
+			Interpreter.eval(t, originalEnv);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
