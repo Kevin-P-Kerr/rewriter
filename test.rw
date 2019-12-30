@@ -4,4 +4,8 @@ g = Math("(20*3/2)")
 e = g.1
 f = e.0
 !DEF foo : Math("($a*$b/$c)") Math("($b/$c*$a)") !
+!DEF comAdd : Math("($a+$b)") Math("($b+$a)") !
 foo(Math("(20*3/2)"))
+
+Math("(2+3+3)")
+comAdd(Math("(2+5+3)"))
