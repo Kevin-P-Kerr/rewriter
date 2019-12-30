@@ -2,8 +2,11 @@ package com.rewrite.grammar.parse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.rewrite.Tuple;
 import com.rewrite.grammar.parse.Tokenizer.Token;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
@@ -209,12 +212,32 @@ public class GenericParser {
 
 	}
 
-	private Map<String, List<ParseTableCell>> toParseTable() {
+	private static
+
+	private static List<ParseTableCell> toRow(GenericParser gp) {
+		List<ParseTableCell> ret = Lists.newArrayList();
+		GenericParserTuple gpt = gp.head;
+		while (gpt != null) {
+			ParseTableCell ptc = toParseTableCell(gpt);
+			ret.add(ptc);
+			gpt = gpt.next;
+		}
+		return ret;
+	}
+
+	private Map<String, List<ParseTableCell>> toParseTable() throws Exception {
 		// reset the token stream
 		TokenStream tokens = src.copy();
 		Map<String, List<ParseTableCell>> ret = Maps.newHashMap();
-
-		return ret;
+		EBNFParser a = new EBNFParser(tokens);
+		Map<String, GenericParser> namedParsers = a.parseUnstubbed();
+		Map<String, List<ParseTableCell>> m = Maps.newHashMap();
+		for (Entry<String, GenericParser> e : namedParsers.entrySet()) {
+			String name = e.getKey();
+			List<ParseTableCell> r = toRow(e.getValue());
+			m.put(name, r);
+		}
+		return m;
 	}
 
 	public SyntaxNode partiallyParse(StringPump pump) throws Exception {

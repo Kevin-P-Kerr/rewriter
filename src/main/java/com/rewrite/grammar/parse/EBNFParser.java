@@ -16,7 +16,7 @@ public class EBNFParser {
 		this.tokens = t;
 	}
 
-	public List<GenericParser> parse() throws Exception {
+	public Map<String, GenericParser> parseUnstubbed() throws Exception {
 		List<GenericParser> ret = Lists.newArrayList();
 		Map<String, GenericParser> namedParsers = Maps.newHashMap();
 		while (tokens.hasToken()) {
@@ -34,6 +34,12 @@ public class EBNFParser {
 			namedParsers.put(name, gp);
 			ret.add(gp);
 		}
+		return namedParsers;
+	}
+
+	public List<GenericParser> parse() throws Exception {
+		Map<String, GenericParser> namedParsers = parseUnstubbed();
+		List<GenericParser> ret = Lists.newArrayList(namedParsers.values());
 		for (GenericParser gp : ret) {
 			gp.unStub(namedParsers);
 		}
