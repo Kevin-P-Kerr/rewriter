@@ -215,6 +215,7 @@ public class Interpreter {
 		assertName(s, "DefExpr");
 		List<SyntaxNode> children = s.getChildren();
 		String name = collectStringFromVarName(children.get(1));
+		SyntaxNode sn = new SyntaxNode("INTERNAL_FUNC");
 		for (int i = 2, ii = s.getChildren().size(); i < ii; i++) {
 			SyntaxNode c = children.get(i);
 			assertName(c, "BodyPair");
@@ -231,9 +232,29 @@ public class Interpreter {
 			SyntaxNode str = invk1.getChildren().get(3);
 			assertName(str, "String");
 			String arg = collectStringFromString(invk1.getChildren().get(3));
-			SyntaxNode pe = gp.partiallyParse(new StringPump(arg));
+			SyntaxNode pe = gp.parse(new StringPump(arg));
+			//
+			SyntaxNode invk2 = c.getChildren().get(1);
+			assertName(invk2, "PartInvkExpr");
+			funcName = invk1.getChildren().get(0);
+			assertName(funcName, "FuncName");
+			varName = funcName.getChildren().get(0);
+			functionName = collectStringFromVarName(varName);
+			gp = e.getParser(functionName);
+			if (gp == null) {
+				throw new Exception();
+			}
+			str = invk2.getChildren().get(3);
+			assertName(str, "String");
+			arg = collectStringFromString(invk1.getChildren().get(3));
+			SyntaxNode pe2 = gp.parse(new StringPump(arg));
+			SyntaxNode v = new SyntaxNode("BodyPair");
+			v.addChild(pe);
+			v.addChild(pe2);
+			sn.addChild(v);
 		}
-		return null;
+		e.put(name, sn);
+		return sn;
 	}
 
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
