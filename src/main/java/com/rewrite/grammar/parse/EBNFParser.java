@@ -37,6 +37,15 @@ public class EBNFParser {
 		return namedParsers;
 	}
 
+	public Map<String, GenericParser> parseToMap() throws Exception {
+		Map<String, GenericParser> namedParsers = parseUnstubbed();
+		List<GenericParser> ret = Lists.newArrayList(namedParsers.values());
+		for (GenericParser gp : ret) {
+			gp.unStub(namedParsers);
+		}
+		return namedParsers;
+	}
+
 	public List<GenericParser> parse() throws Exception {
 		Map<String, GenericParser> namedParsers = parseUnstubbed();
 		List<GenericParser> ret = Lists.newArrayList(namedParsers.values());

@@ -68,7 +68,7 @@ public class SyntaxNode {
 		return sb.toString();
 	}
 
-	public void rollUp() {
+	public SyntaxNode rollUp() {
 		List<SyntaxNode> newChildren = Lists.newArrayList();
 		for (SyntaxNode c : children) {
 			c.rollUp();
@@ -79,6 +79,7 @@ public class SyntaxNode {
 			}
 		}
 		children = newChildren;
+		return this;
 	}
 
 	public String print() {

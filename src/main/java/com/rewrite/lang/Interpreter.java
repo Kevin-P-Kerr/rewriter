@@ -205,7 +205,7 @@ public class Interpreter {
 			SyntaxNode str = arguments.get(0);
 			assertName(str, "String");
 			String toBeParsed = collectStringFromString(str);
-			return gp.parse(new StringPump(toBeParsed));
+			return gp.parse(new StringPump(toBeParsed)).rollUp();
 		}
 		SyntaxNode found = e.getSyntax(k);
 		return evalRewrite(found, arguments, e);
@@ -232,7 +232,7 @@ public class Interpreter {
 			SyntaxNode str = invk1.getChildren().get(3);
 			assertName(str, "String");
 			String arg = collectStringFromString(invk1.getChildren().get(3));
-			SyntaxNode pe = gp.parse(new StringPump(arg));
+			SyntaxNode pe = gp.parse(new StringPump(arg)).rollUp();
 			//
 			SyntaxNode invk2 = c.getChildren().get(1);
 			assertName(invk2, "PartInvkExpr");
