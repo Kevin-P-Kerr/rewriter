@@ -72,7 +72,7 @@ public class Interpreter {
 		if (!varName.getName().equals("VarName")) {
 			throw new Exception();
 		}
-		SyntaxNode v = evalExpr(s.getChildren().get(1), e);
+		SyntaxNode v = evalExpr(s.getChildren().get(2), e);
 		String k = collectStringFromVarName(varName);
 		e.put(k, v);
 		return v;
@@ -252,12 +252,9 @@ public class Interpreter {
 		return sn;
 	}
 
-	private static int getNumFromNum(SyntaxNode sn) {
-		String s = "";
-		for (SyntaxNode c : sn.getChildren()) {
-			s += c.getValue();
-		}
-		return Integer.parseInt(s);
+	private static int getNumFromNum(SyntaxNode sn) throws Exception {
+		assertName(sn, "Num");
+		return Integer.parseInt(sn.print());
 	}
 
 	private static SyntaxNode evalVal(SyntaxNode sn, Environment e) throws Exception {
