@@ -1,7 +1,9 @@
 package com.rewrite.grammar.parse;
 
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.rewrite.grammar.parse.Tokenizer.Token;
 import com.rewrite.grammar.parse.Tokenizer.TokenStream;
 import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
@@ -10,6 +12,8 @@ public class GenericParser {
 	private static enum PARSER_TYPE {
 		PT_RANGE, PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
 	}
+
+	private TokenStream src;
 
 	private static class GenericParserTuple {
 		PARSER_TYPE type;
@@ -34,6 +38,7 @@ public class GenericParser {
 
 	public static GenericParser from(TokenStream tokens) throws Exception {
 		GenericParser ret = new GenericParser();
+		ret.src = tokens;
 		ret.head = new GenericParserTuple(new NamedStubParser("head"), null);
 		ret.current = ret.head;
 		Token t = tokens.getNext();
@@ -200,8 +205,21 @@ public class GenericParser {
 		}
 	}
 
-	public SyntaxNode partiallyParse(StringPump pump) throws Exception {
+	private static class ParseTableCell {
 
+	}
+
+	private Map<String, List<ParseTableCell>> toParseTable() {
+		// reset the token stream
+		TokenStream tokens = src.copy();
+		Map<String, List<ParseTableCell>> ret = Maps.newHashMap();
+
+		return ret;
+	}
+
+	public SyntaxNode partiallyParse(StringPump pump) throws Exception {
+		Map<String, List<ParseTableCell>> parseTable = toParseTable();
+		return null;
 	}
 
 }
