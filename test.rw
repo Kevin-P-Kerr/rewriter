@@ -8,4 +8,4 @@ f = e.0
 foo(Math("(20*3/2)"))
 
 Math("(2+3+3)")
-comAdd(Math("(2+5+3)"))
+comAdd(Math("(2+5*3)"))
