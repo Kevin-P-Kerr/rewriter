@@ -40,7 +40,7 @@ public class Rewrite {
 				langEBNF += langSpec.nextLine();
 			}
 			EBNFParser langParserParser = new EBNFParser(Tokenizer.tokenize(langEBNF));
-			GenericParser langParser = langParserParser.parse().get(0);
+			GenericParser langParser = langParserParser.parseToMap().get("Program");
 			File file = new File(fn);
 			FileReader r = new FileReader(file);
 			obf = new BufferedReader(r);

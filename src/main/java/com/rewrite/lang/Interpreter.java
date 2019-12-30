@@ -52,7 +52,7 @@ public class Interpreter {
 	}
 
 	private static char getCharFromChar(SyntaxNode sn) {
-		return sn.getChildren().get(1).getValue().charAt(0);
+		return sn.getChildren().get(0).getChildren().get(0).getValue().charAt(0);
 	}
 
 	private static String collectStringFromVarName(SyntaxNode var) throws Exception {
@@ -84,24 +84,24 @@ public class Interpreter {
 			if (!c.getName().equals("Arg")) {
 				throw new Exception();
 			}
-			SyntaxNode evaluated = evalExpr(c, e);
+			SyntaxNode evaluated = evalExpr(c.getChildren().get(0), e);
 			ret.add(evaluated);
 		}
 		return ret;
 	}
 
 	private static String collectStringFromString(SyntaxNode str) {
-		return str.getValue();
+		StringBuilder sb = new StringBuilder();
+		for (SyntaxNode sn : str.getChildren()) {
+			sb.append(sn.getValue());
+		}
+		return sb.toString();
 	}
 
 	private static void assertName(SyntaxNode s, String n) throws Exception {
 		if (!s.getName().equals(n)) {
 			throw new Exception();
 		}
-	}
-
-	private static SyntaxNode partialEval(SyntaxNode s) throws Exception {
-		return null;
 	}
 
 	private static boolean matches(SyntaxNode matcher, SyntaxNode s) {
@@ -127,7 +127,7 @@ public class Interpreter {
 
 	private static void getLocals(SyntaxNode matcher, SyntaxNode s, Map<String, SyntaxNode> locals) {
 		if (matcher.getName().equals("WildCard")) {
-			locals.put(matcher.getValue(), s);
+			locals.put(matcher.print(), s);
 			return;
 		}
 		for (int i = 0, ii = matcher.getChildren().size(); i < ii; i++) {
@@ -145,7 +145,7 @@ public class Interpreter {
 		}
 		for (SyntaxNode c : template.getChildren()) {
 			SyntaxNode newChild;
-			if (c.getName().equals("WildCard")) {
+			if (c.hasName() && c.getName().equals("WildCard")) {
 				SyntaxNode ss = locals.get(template.getValue());
 				newChild = new SyntaxNode(ss.getName(), ss.getValue());
 			} else {
@@ -216,7 +216,7 @@ public class Interpreter {
 		List<SyntaxNode> children = s.getChildren();
 		String name = collectStringFromVarName(children.get(1));
 		SyntaxNode sn = new SyntaxNode("INTERNAL_FUNC");
-		for (int i = 2, ii = s.getChildren().size(); i < ii; i++) {
+		for (int i = 3, ii = s.getChildren().size() - 1; i < ii; i++) {
 			SyntaxNode c = children.get(i);
 			assertName(c, "BodyPair");
 			SyntaxNode invk1 = c.getChildren().get(0);
@@ -236,7 +236,7 @@ public class Interpreter {
 			//
 			SyntaxNode invk2 = c.getChildren().get(1);
 			assertName(invk2, "PartInvkExpr");
-			funcName = invk1.getChildren().get(0);
+			funcName = invk2.getChildren().get(0);
 			assertName(funcName, "FuncName");
 			varName = funcName.getChildren().get(0);
 			functionName = collectStringFromVarName(varName);
@@ -247,7 +247,7 @@ public class Interpreter {
 			str = invk2.getChildren().get(3);
 			assertName(str, "String");
 			arg = collectStringFromString(invk1.getChildren().get(3));
-			SyntaxNode pe2 = gp.parse(new StringPump(arg));
+			SyntaxNode pe2 = gp.parse(new StringPump(arg)).rollUp();
 			SyntaxNode v = new SyntaxNode("BodyPair");
 			v.addChild(pe);
 			v.addChild(pe2);
@@ -266,8 +266,9 @@ public class Interpreter {
 	}
 
 	private static SyntaxNode evalVal(SyntaxNode sn, Environment e) throws Exception {
-		if (sn.getValue().equals("\"")) {
-			return sn;
+		SyntaxNode firstChild = sn.getChildren().get(0);
+		if (firstChild.hasValue() && firstChild.getValue().equals("\"")) {
+			return sn.getChildren().get(1);
 		}
 		SyntaxNode varName = sn.getChildren().get(0);
 		assertName(varName, "VarName");
@@ -288,7 +289,7 @@ public class Interpreter {
 		switch (s.getName()) {
 		case "AssignExpr":
 			return evalAssign(s, e);
-		case "InvExpr":
+		case "InvkExpr":
 			return evalInvoke(s, e);
 		case "DefExpr":
 			return evalDef(s, e);

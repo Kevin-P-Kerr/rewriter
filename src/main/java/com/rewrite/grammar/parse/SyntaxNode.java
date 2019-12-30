@@ -97,4 +97,12 @@ public class SyntaxNode {
 		return children;
 	}
 
+	public boolean hasValue() {
+		return value != null;
+	}
+
+	public boolean hasName() {
+		return name != null;
+	}
+
 }
