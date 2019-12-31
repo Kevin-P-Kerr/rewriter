@@ -105,9 +105,7 @@ public class Interpreter {
 	}
 
 	private static boolean matches(SyntaxNode matcher, SyntaxNode s) {
-		if ((matcher.hasName() && matcher.getName().equals("WildCard"))
-				|| (matcher.hasChildren() && matcher.getChildren().get(0).hasName()
-						&& matcher.getChildren().get(0).getName().equals("WildCard"))) {
+		if (matcher.getName().equals("WildCard")) {
 			return true;
 		}
 		if (!matcher.getName().equals(s.getName())) {
@@ -139,19 +137,9 @@ public class Interpreter {
 
 	private static SyntaxNode doRewrite(SyntaxNode template, SyntaxNode s, Map<String, SyntaxNode> locals) {
 		SyntaxNode ret;
-		boolean hasChildren = template.hasChildren();
-		SyntaxNode firstChild = null;
-		if (hasChildren) {
-			firstChild = template.getChildren().get(0);
-		}
 		if (template.getName().equals("WildCard")) {
 			SyntaxNode c = locals.get(template.print());
 			ret = c.copy();
-			return ret;
-		} else if (hasChildren && firstChild.hasName() && firstChild.getName().equals("WildCard")) {
-			SyntaxNode c = locals.get(firstChild.print());
-			ret = new SyntaxNode(template.getName(), template.getValue());
-			ret.addChild(c.copy());
 			return ret;
 		} else {
 			ret = new SyntaxNode(s.getName(), s.getValue());
