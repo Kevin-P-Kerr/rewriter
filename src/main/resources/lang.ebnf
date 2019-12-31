@@ -2,7 +2,7 @@ Program = {Expr.}.
 Expr = | AssignExpr. | IfExpr. | InvkExpr. | DefExpr. ValExpr.....
 BoolExpr = Expr '==' Expr.
 SetExpr = '!Set' Expr Expr '!'.
-IfExpr = 'if' Expr 'then' Expr.
+IfExpr = 'if' Expr 'then' Expr 'else' Expr.
 Args = {Arg.}.
 InvkExpr = FuncName '(' Args ')'.
 Arg = Expr.
