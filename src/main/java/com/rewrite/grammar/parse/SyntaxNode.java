@@ -113,4 +113,8 @@ public class SyntaxNode {
 		return sn;
 	}
 
+	public boolean hasChildren() {
+		return children.size() > 0;
+	}
+
 }

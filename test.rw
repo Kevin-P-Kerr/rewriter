@@ -1,6 +1,6 @@
 arith.ebnf
 
-g = Math("(20*3/2)")
+g = Math("(20*10/2)")
 e = g.1
 f = e.0
 !DEF foo : Math("($a*$b/$c)") Math("($b/$c*$a)") !
@@ -8,4 +8,4 @@ f = e.0
 foo(Math("(20*3/2)"))
 
 Math("(2+3+3)")
-comAdd(Math("(2+5*3)"))
+comAdd(Math("(2+5*7)"))
