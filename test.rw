@@ -2,6 +2,7 @@ arith.ebnf
 
 g = Math("(20*3/2)")
 e = g.1.0.name
+f = e.name
 !DEF foo : Math("($a*$b/$c)") Math("($b/$c*$a)") !
 !DEF comAdd : Math("($a+$b)") Math("($b+$a)") !
 foo(Math("(20*3/2)"))

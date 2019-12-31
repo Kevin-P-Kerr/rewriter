@@ -1,5 +1,8 @@
 Program = {Expr.}.
-Expr = | AssignExpr. | InvkExpr. | DefExpr. ValExpr....
+Expr = | AssignExpr. | InvkExpr. | BoolExpr. |SetExpr. | IfExpr. | DefExpr. ValExpr.......
+BoolExpr = Expr '<>' Expr.
+SetExpr = '!Set' Expr Expr.
+IfExpr = 'if' Expr 'then' Expr.
 Args = {Arg.}.
 InvkExpr = FuncName '(' Args ')'.
 Arg = Expr.
