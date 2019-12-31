@@ -9,7 +9,8 @@ Char = | Digit. Alpha..
 DefExpr = '!DEF' VarName ':' {BodyPair.}'!'.
 BodyPair = PartInvkExpr PartInvkExpr .
 PartInvkExpr = FuncName '(' '"' String '"'')'.
-ValExpr = | '"' String '"'. VarName ['.' Num.]..
+ValExpr = | '"' String '"'. VarName [{Accessor.}.]..
+Accessor = '.' | 'name'. Num..
 AssignExpr = VarName '=' Expr.
 Num = {Digit.}.
 String = {-'$'.'~'..}.

@@ -266,11 +266,17 @@ public class Interpreter {
 		assertName(varName, "VarName");
 		String k = collectStringFromVarName(varName);
 		SyntaxNode v = e.getSyntax(k);
-		if (sn.getChildren().size() > 1) {
-			SyntaxNode num = sn.getChildren().get(2);
-			assertName(num, "Num");
-			int n = getNumFromNum(num);
-			return v.getChildren().get(n);
+		for (int i = 1, ii = sn.getChildren().size(); i < ii; i++) {
+			SyntaxNode accessor = sn.getChildren().get(i);
+			assertName(accessor, "Accessor");
+			SyntaxNode ac = accessor.getChildren().get(1);
+			if (ac.hasValue() && ac.getValue().equals("name")) {
+				SyntaxNode ret = new SyntaxNode("GET-NAME", v.hasName() ? v.getName() : "anonymous");
+				return ret;
+			}
+			assertName(ac, "Num");
+			int n = getNumFromNum(ac);
+			v = v.getChildren().get(n);
 		}
 		return v;
 	}
