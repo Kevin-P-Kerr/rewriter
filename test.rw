@@ -1,5 +1,6 @@
 arith.ebnf
 
+if x then Expr("2+2")
 g = Math("(20*3/2)")
 e = g.1.0.name
 f = e.name

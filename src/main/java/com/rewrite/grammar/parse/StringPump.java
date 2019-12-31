@@ -44,6 +44,15 @@ public class StringPump {
 		return i < l;
 	}
 
+	public boolean hasNonWhite() {
+		boolean b = i < l;
+		if (!b) {
+			return false;
+		}
+		char c = str.charAt(i);
+		return !Tokenizer.isWhite(c);
+	}
+
 	public int getIndex() {
 		return i;
 	}

@@ -82,8 +82,9 @@ public class GenericParser {
 
 				String l = t.getLit();
 				t = tokens.getNext();
-				if (t.getType() != TokenType.TT_SINGLE_QUOTE) {
-					throw new Exception();
+				while (t.getType() != TokenType.TT_SINGLE_QUOTE) {
+					l += t.getLit();
+					t = tokens.getNext();
 				}
 				GenericParser n = new LiteralParser(l);
 				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_LITERAL);
@@ -132,7 +133,7 @@ public class GenericParser {
 				}
 			} else if (gpt.type == PARSER_TYPE.PT_REPEATING) {
 				n = pump.getIndex();
-				while (pump.hasChar()) {
+				while (pump.hasNonWhite()) {
 					if (gpt.parser.accepts(pump)) {
 						n = pump.getIndex();
 					} else {
@@ -164,7 +165,7 @@ public class GenericParser {
 				sn.addChild(node);
 				if (gpt.type == PARSER_TYPE.PT_REPEATING) {
 					n = pump.getIndex();
-					while (pump.hasChar()) {
+					while (pump.hasNonWhite()) {
 						node = gpt.parser.parse(pump);
 						if (node != null) {
 							n = pump.getIndex();
