@@ -170,7 +170,7 @@ public class GenericParser {
 			int n = pump.getIndex();
 			SyntaxNode node = gpt.parser.parse(pump);
 			if (node == null) {
-				if (gpt.type != PARSER_TYPE.PT_OPTIONAL) {
+				if (gpt.type != PARSER_TYPE.PT_OPTIONAL && gpt.type != PARSER_TYPE.PT_NEGATIVE) {
 					System.err.println("could not parse " + pump.peekChar() + " char index: " + pump.getIndex()
 							+ "parse name: " + (name == null ? "" : name));
 					return null;
