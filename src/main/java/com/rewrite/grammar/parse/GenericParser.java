@@ -61,7 +61,7 @@ public class GenericParser {
 					throw new Exception();
 				}
 			} else if (t.getType() == TokenType.TT_LPAREN) {
-				// repeated field
+				// group field
 				GenericParser gp = from(tokens);
 				GenericParserTuple tuple = new GenericParserTuple(gp, PARSER_TYPE.PT_GROUP);
 				ret.current.next = tuple;

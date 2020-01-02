@@ -9,7 +9,10 @@ public class NegativeParser extends GenericParser {
 
 	@Override
 	public boolean accepts(StringPump sp) {
-		return !gp.accepts(sp);
+		int n = sp.getIndex();
+		boolean b = !gp.accepts(sp);
+		sp.setIndex(n);
+		return b;
 	}
 
 	@Override
