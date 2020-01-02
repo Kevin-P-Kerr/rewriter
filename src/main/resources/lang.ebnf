@@ -14,7 +14,7 @@ BodyPair = PartInvkExpr OpWhite PartInvkExpr .
 PartInvkExpr = FuncName OpWhite '(' OpWhite '"' String '"'OpWhite ')'.
 ValExpr = | '"' String '"'. VarName [{Accessor.}.]..
 Accessor = '.' | 'name'. Num..
-AssignExpr = VarName '=' Expr.
+AssignExpr = VarName OpWhite '=' OpWhite Expr.
 Num = {Digit.}.
 String = {-'$'.'~'..}.
 Digit = -'0'.'9'..

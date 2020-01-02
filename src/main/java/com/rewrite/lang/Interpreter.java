@@ -100,7 +100,7 @@ public class Interpreter {
 
 	private static void assertName(SyntaxNode s, String n) throws Exception {
 		if (!s.getName().equals(n)) {
-			throw new Exception();
+			throw new Exception("expected " + n + ", got " + s.getName());
 		}
 	}
 
@@ -306,7 +306,7 @@ public class Interpreter {
 		case "IfExpr":
 			return evalIf(s, e);
 		default:
-			throw new Exception();
+			throw new Exception("expected expression, got " + s.getName());
 
 		}
 
