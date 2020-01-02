@@ -72,7 +72,12 @@ public class GenericParser {
 				}
 			} else if (t.getType() == TokenType.TT_VAR) {
 				String name = t.getLit();
-				GenericParser n = new NamedStubParser(name);
+				GenericParser n;
+				if (name.equals("WhiteSpace")) {
+					n = new WhiteSpaceParser();
+				} else {
+					n = new NamedStubParser(name);
+				}
 				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_NAMED);
 				tuple.name = name;
 				ret.current.next = tuple;
