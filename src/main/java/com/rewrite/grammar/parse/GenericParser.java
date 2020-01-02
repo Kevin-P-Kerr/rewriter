@@ -7,7 +7,7 @@ import com.rewrite.grammar.parse.Tokenizer.Token.TokenType;
 
 public class GenericParser {
 	private static enum PARSER_TYPE {
-		PT_RANGE, PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED;
+		PT_RANGE, PT_DISJ, PT_GROUP, PT_REPEATING, PT_OPTIONAL, PT_LITERAL, PT_NAMED, PT_WHITE, PT_NEGATIVE;
 	}
 
 	private TokenStream src;
@@ -72,8 +72,13 @@ public class GenericParser {
 				}
 			} else if (t.getType() == TokenType.TT_TILDE) {
 				// negate
+				String name = t.getLit();
 				GenericParser gp = from(tokens);
-
+				GenericParser s = new NegativeParser(gp);
+				GenericParserTuple tuple = new GenericParserTuple(s, PARSER_TYPE.PT_NEGATIVE);
+				tuple.name = name;
+				ret.current.next = tuple;
+				ret.current = ret.current.next;
 			} else if (t.getType() == TokenType.TT_VAR) {
 				String name = t.getLit();
 				GenericParser n;
@@ -82,7 +87,7 @@ public class GenericParser {
 				} else {
 					n = new NamedStubParser(name);
 				}
-				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_NAMED);
+				GenericParserTuple tuple = new GenericParserTuple(n, PARSER_TYPE.PT_WHITE);
 				tuple.name = name;
 				ret.current.next = tuple;
 				ret.current = ret.current.next;
@@ -166,6 +171,8 @@ public class GenericParser {
 			SyntaxNode node = gpt.parser.parse(pump);
 			if (node == null) {
 				if (gpt.type != PARSER_TYPE.PT_OPTIONAL) {
+					System.err.println("could not parse " + pump.peekChar() + " char index: " + pump.getIndex()
+							+ "parse name: " + (name == null ? "" : name));
 					return null;
 				} else {
 					pump.setIndex(n);
