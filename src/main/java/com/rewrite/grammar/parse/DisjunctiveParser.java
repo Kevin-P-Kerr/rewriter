@@ -27,6 +27,7 @@ public class DisjunctiveParser extends GenericParser {
 
 	@Override
 	public SyntaxNode parse(StringPump sp) throws Exception {
+
 		int n = sp.getIndex();
 		if (left.accepts(sp)) {
 			sp.setIndex(n);

@@ -283,8 +283,12 @@ public class Interpreter {
 		return null;
 	}
 
-	private static SyntaxNode evalIf(SyntaxNode s, Environment e) {
-		return s;
+	private static SyntaxNode evalIf(SyntaxNode s, Environment e) throws Exception {
+		SyntaxNode expr1 = evalExpr(s.getChildren().get(2), e);
+		if (expr1.hasName() && expr1.getName().equals("BOOL") && expr1.hasValue() && expr1.getValue().equals("TRUE")) {
+			return evalExpr(s.getChildren().get(6), e);
+		}
+		return evalExpr(s.getChildren().get(10), e);
 	}
 
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {

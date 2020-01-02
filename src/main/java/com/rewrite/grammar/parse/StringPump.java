@@ -48,4 +48,11 @@ public class StringPump {
 		return str;
 	}
 
+	public String getIndex(int n) {
+		if (n >= l) {
+			return "EOI";
+		}
+		return str.charAt(n) + "";
+	}
+
 }
