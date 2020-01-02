@@ -9,20 +9,12 @@ public class StringPump {
 		this.str = s;
 		this.l = s.length();
 		this.i = 0;
-		killWhite();
-	}
-
-	private void killWhite() {
-		while (i < l && Tokenizer.isWhite(str.charAt(i))) {
-			i++;
-		}
 	}
 
 	public char getChar() throws IndexOutOfBoundsException {
 		if (i >= l) {
 			throw new IndexOutOfBoundsException();
 		}
-		killWhite();
 		int n = i;
 		i++;
 		return str.charAt(n);
@@ -33,24 +25,14 @@ public class StringPump {
 			throw new IndexOutOfBoundsException();
 		}
 		int n = i;
-		killWhite();
+
 		char c = str.charAt(i);
 		i = n;
 		return c;
 	}
 
 	public boolean hasChar() {
-		killWhite();
 		return i < l;
-	}
-
-	public boolean hasNonWhite() {
-		boolean b = i < l;
-		if (!b) {
-			return false;
-		}
-		char c = str.charAt(i);
-		return !Tokenizer.isWhite(c);
 	}
 
 	public int getIndex() {

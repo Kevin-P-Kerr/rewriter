@@ -19,4 +19,4 @@ Num = {Digit.}.
 String = {-'$'.'~'..}.
 Digit = -'0'.'9'..
 Alpha = |-'a'.'z'.. -'A'.'Z'...
-
+White = {WhiteSpace.}.
