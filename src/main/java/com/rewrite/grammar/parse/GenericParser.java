@@ -133,7 +133,7 @@ public class GenericParser {
 				}
 			} else if (gpt.type == PARSER_TYPE.PT_REPEATING) {
 				n = pump.getIndex();
-				while (pump.hasNonWhite()) {
+				while (pump.hasChar()) {
 					if (gpt.parser.accepts(pump)) {
 						n = pump.getIndex();
 					} else {
@@ -165,7 +165,7 @@ public class GenericParser {
 				sn.addChild(node);
 				if (gpt.type == PARSER_TYPE.PT_REPEATING) {
 					n = pump.getIndex();
-					while (pump.hasNonWhite()) {
+					while (pump.hasChar()) {
 						node = gpt.parser.parse(pump);
 						if (node != null) {
 							n = pump.getIndex();

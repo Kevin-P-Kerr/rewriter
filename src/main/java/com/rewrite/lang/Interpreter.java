@@ -285,6 +285,10 @@ public class Interpreter {
 		return null;
 	}
 
+	private static SyntaxNode evalIf(SyntaxNode s, Environment e) {
+		return s;
+	}
+
 	private static SyntaxNode evalExpr(SyntaxNode s, Environment e) throws Exception {
 		assertName(s, "Expr");
 		s = s.getChildren().get(0);
@@ -299,6 +303,8 @@ public class Interpreter {
 			return evalVal(s, e);
 		case "BoolExpr":
 			return evalBool(s, e);
+		case "IfExpr":
+			return evalIf(s, e);
 		default:
 			throw new Exception();
 
