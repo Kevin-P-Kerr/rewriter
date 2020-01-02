@@ -20,6 +20,9 @@ public class SyntaxNode {
 	}
 
 	public void addChild(SyntaxNode c) {
+		if (c.hasName() && c.getName().equals("White")) {
+
+		}
 		children.add(c);
 	}
 
