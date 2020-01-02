@@ -51,7 +51,7 @@ public class GenericParser {
 					throw new Exception();
 				}
 			} else if (t.getType() == TokenType.TT_LBRAK) {
-				// repeated field
+				// optional field
 				GenericParser gp = from(tokens);
 				GenericParserTuple tuple = new GenericParserTuple(gp, PARSER_TYPE.PT_OPTIONAL);
 				ret.current.next = tuple;
@@ -70,6 +70,10 @@ public class GenericParser {
 				if (t.getType() != TokenType.TT_RPAREN) {
 					throw new Exception();
 				}
+			} else if (t.getType() == TokenType.TT_TILDE) {
+				// negate
+				GenericParser gp = from(tokens);
+
 			} else if (t.getType() == TokenType.TT_VAR) {
 				String name = t.getLit();
 				GenericParser n;

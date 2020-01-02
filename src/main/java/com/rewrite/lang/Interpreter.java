@@ -315,6 +315,9 @@ public class Interpreter {
 	private static void eval(SyntaxNode s, Environment e) throws Exception {
 		assertName(s, "Program");
 		for (SyntaxNode c : s.getChildren()) {
+			if (c.getName().equals("OpWhite")) {
+				continue;
+			}
 			SyntaxNode g = evalExpr(c, e);
 			System.out.println(g.print());
 		}
