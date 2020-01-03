@@ -2,7 +2,7 @@ arith.ebnf
 
 x = Expr("3*111")
 
-if x then Expr("2+2") else "aaa"
+if x == y then Expr("2+2") else "aaa"
 g = Math("(20*3/2)")
 e = g.1.0.name
 f = e.name
