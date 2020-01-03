@@ -212,7 +212,7 @@ public class GenericParser {
 				gpt.parser = gp;
 			} else if (gpt.type == PARSER_TYPE.PT_OPTIONAL || gpt.type == PARSER_TYPE.PT_REPEATING
 					|| gpt.type == PARSER_TYPE.PT_GROUP || gpt.type == PARSER_TYPE.PT_DISJ
-					|| gpt.type == PARSER_TYPE.PT_RANGE) {
+					|| gpt.type == PARSER_TYPE.PT_RANGE || gpt.type == PARSER_TYPE.PT_NEGATIVE) {
 				gpt.parser.unStub(namedParsers);
 			}
 			gpt = gpt.next;

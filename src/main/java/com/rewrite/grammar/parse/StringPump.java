@@ -45,7 +45,7 @@ public class StringPump {
 
 	@Override
 	public String toString() {
-		return str;
+		return str.charAt(i) + "";
 	}
 
 	public String getIndex(int n) {
