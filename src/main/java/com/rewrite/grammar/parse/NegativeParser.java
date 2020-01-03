@@ -13,10 +13,6 @@ public class NegativeParser extends GenericParser {
 	public boolean accepts(StringPump sp) {
 		int n = sp.getIndex();
 		boolean b = !gp.accepts(sp);
-		if (!b) {
-			sp.setIndex(n);
-			return b;
-		}
 		sp.setIndex(n);
 		return b;
 	}
